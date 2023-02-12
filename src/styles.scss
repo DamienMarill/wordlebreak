@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  @apply text-3xl font-bold text-blue-500 underline;
+}
