@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
 
 jobs:
   copy_files:
@@ -18,10 +20,14 @@ jobs:
           find . -name "*.css" -exec cp {} {}.md \;
           find . -name "*.scss" -exec cp {} {}.md \;
 
-      - name: Commit and push changes
+      - name: Commit and push changes if there are any
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add -A
-          git commit -m "Copy CSS and SCSS files to .md" || echo "No changes to commit"
-          git push
+          if [[ $(git diff --staged) ]]; then
+              git commit -m "Copy CSS and SCSS files to .md"
+              git push
+          else
+              echo "No changes to commit"
+          fi
