@@ -1,0 +1,27 @@
+name: Copy CSS and SCSS files
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  copy_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Copy CSS and SCSS files
+        run: |
+          find . -name "*.css" -exec cp {} {}.md \;
+          find . -name "*.scss" -exec cp {} {}.md \;
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add -A
+          git commit -m "Copy CSS and SCSS files to .md" || echo "No changes to commit"
+          git push
